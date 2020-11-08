@@ -59,10 +59,10 @@ class Map:
             if self.structure[block_x][block_y] == 0:                   # checks if food will spawn in a free space (no wall, wall bad)
                 for i in self.snake.body:                               # checks if food will spawn where the snake is
                     if i == [block_x, block_y]:
-                        print('Food spawned in snek, respawning...')
+                        # Cibo spawnato nel serpente, respawn...
                         self.add_food(random.randint(0, SPRITE_NUMBER - 1), random.randint(0, SPRITE_NUMBER - 1))
             else:
-                print('Food spawned in wall, respawning...')
+                # Cibo spawnato nella parete, respawn
                 self.add_food(random.randint(0, SPRITE_NUMBER - 1), random.randint(0, SPRITE_NUMBER - 1))
             
         except Exception: 
