@@ -1,8 +1,8 @@
 """
 genetic_algorithm.py
-~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
-Modulo che implementa un algoritmo genetico per allenare le reti neurali a giocare a snake
+Modulo che implementa un algoritmo genetico per allenare le reti neurali a giocare a snake\n
 I genitori sono selezionati fra i migliori, si fa un crossover + mutazione
 """
 
@@ -27,9 +27,9 @@ class GeneticAlgorithm:
         :param population_size (int): Numero di neural net per ogni generazione (default e' 1000)
         :param generation_number (int): Per quante generazioni andra' avanti l'algoritmo (default e' 100)
         :param crossover_rate (int): Proporzione su quanti figli creare ad ogni generazione (default e' 0.3)
-        :param crossover_method (str): Come verranno generati i figli (default e' 'neuron')
+        :param crossover_method (str): Come verranno generati i figli (default e' ``neuron``)
         :param mutation_rate (int): Proporzione su quanta popolazione verra' mutata ad ogni generazione (default e' 0.7)
-        :param mutation_method (str): Come verra' fatta la mutazione (default e' 'weight')
+        :param mutation_method (str): Come verra' fatta la mutazione (default e' ``weight``)
         """
         self.networks_shape = networks_shape
         if self.networks_shape is None:             # se non e' passata nessuna morfologia della neural net
@@ -50,7 +50,7 @@ class GeneticAlgorithm:
 
     def start(self):
         """
-        Funzione main per l'algoritmo genetico, alcuni step sono in thread
+        Funzione main per l'algoritmo genetico, alcuni step sono in parallelo
 
         Steps ad ogni generazione:\n
         - Selezione parenti
@@ -58,9 +58,7 @@ class GeneticAlgorithm:
         - Generazione individui mutati
         - Valutazione dell'intera popolazione (vecchia popolazione + figli + individui mutati)
         - Altre mutazioni su individui casuali (migliora il learning)
-        - Mantenimento degli individui di *population_size*, scarto dei peggiori
-
-        :return: Niente
+        - Mantenimento degli individui di ``population_size``, scarto dei peggiori
         """
         networks = self.networks
         population_size = self.population_size
@@ -93,10 +91,10 @@ class GeneticAlgorithm:
         Funzione di selezione dei parenti, 3 individui casuali e li mette in competizione classificandoli
         in base al loro fitness, il migliore viene selezionato come genitore
 
-        :param networks: lista di neural net
-        :param crossover_number: numero di genitori necessari
-        :param population_size: dimensioni della popolazione
-        :return: lista di genitori selezionati
+        :param networks (lista di NeuralNetwork): Lista di neural net da cui selezionare i parenti
+        :param crossover_number (int): Numero di genitori necessari
+        :param population_size (int): Dimensioni della popolazione
+        :return (lista di NeuralNetwork): Lista di genitori selezionati
         """
         parents = []
         for i in range(crossover_number):
@@ -111,9 +109,9 @@ class GeneticAlgorithm:
         Prende casualmente 2 genitori nella lista di genitori e ci fa un crossover,
         generando un figlio
 
-        :param crossover_number: numero di figli necessari
-        :param parents: lista di genitori
-        :return: lista di figli generati
+        :param crossover_number (int): Numero di figli necessari
+        :param parents (lista di NeuralNetwork): Lista di genitori
+        :return (lista di NeuralNetwork): Lista di figli generati
         """
         children = []
         for i in range(crossover_number):
@@ -127,10 +125,10 @@ class GeneticAlgorithm:
         Produce nuovi individui dalla popolazione attuale mutandoli\n
         NB: non modifica gli individui attuali ma ne crea di nuovi
 
-        :param networks: lista di neural net
-        :param mutation_number: numero di individui da mutare
-        :param population_size: dimensioni della popolazione
-        :return: lista di nuovi individui (mutati)
+        :param networks (lista di NeuralNetwork): Lista di neural net da mutare
+        :param mutation_number (int): Numero di individui da mutare
+        :param population_size (int): Dimensioni della popolazione
+        :return (lista di NeuralNetwork): Lista di nuovi individui (mutati)
         """
         mutations = []
         for i in range(mutation_number):
@@ -142,11 +140,10 @@ class GeneticAlgorithm:
         """
         Prende la popolazione di neural net e gli fa giocare 4 partite a testa,
         il punteggio di una neural net e' la media delle 4 partite\n
-        NB: le 4 partite sono parallelizzate usando joblib
+        NB: le 4 partite sono parallelizzate usando ``joblib``
 
-        :param networks: lista di neural net
-        :param num_cores: numero di core della CPU
-        :return: niente ma ogni neural_net in 'networks' e' stata valutata (in neural_net.score)
+        :param networks (lista di NeuralNetwork): Lista di neural net da valutare
+        :param num_cores (int): Numero di core della CPU
         """
         game = Game()
         results1 = Parallel(n_jobs=num_cores)(delayed(game.start)(neural_net=networks[i]) for i in range(len(networks)))
@@ -160,10 +157,10 @@ class GeneticAlgorithm:
         """
         Prende 3 neural net, gli fa giocare una partita a testa e seleziona chi performa meglio
 
-        :param net1: neural net (primo partecipante)
-        :param net2: neural net (secondo partecipante)
-        :param net3: neural net (terzo partecipante)
-        :return: la neural net vincitrice
+        :param net1 (NeuralNetwork): neural net (primo partecipante)
+        :param net2 (NeuralNetwork): neural net (secondo partecipante)
+        :param net3 (NeuralNetwork): neural net (terzo partecipante)
+        :return (NeuralNetwork): la neural net vincitrice
         """
         game = Game()
         game.start(neural_net=net1)                 # net1 gioca la partita
@@ -184,17 +181,17 @@ class GeneticAlgorithm:
         """
         Prende due neural net e produce un figlio in base al metodo contenuto in self.crossover_method
 
-        Esempio di come funziona (method = 'neuron'):\n
+        Esempio di come funziona (method = ``neuron``):\n
         - Due network vengono creati (copie dei rispettivi genitori)
         - Seleziona un neurone casuale in un layer casuale OPPURE un bias casuale in un layer casuale
         - Scambia il neurone o bias fra le due neural net
         - Ogni neural net gioca una partita
         - La migliore viene selezionata
-        Il principio e' lo stesso per i metodi 'weight' o 'layer'        
+        Il principio e' lo stesso per i metodi ``weight`` o ``layer``        
 
-        :param net1: neural net (genitore 1)
-        :param net2: neural net (genitore 2)
-        :return: neural net (figlio)
+        :param net1 (NeuralNetwork): neural net (genitore 1)
+        :param net2 (NeuralNetwork): neural net (genitore 2)
+        :return (NeuralNetwork): neural net (figlio)
         """
         res1 = copy.deepcopy(net1)                 # copia i parenti (che saranno i due figli), altrimenti manipoleremmo i veri parenti
         res2 = copy.deepcopy(net2)
@@ -240,8 +237,8 @@ class GeneticAlgorithm:
         Prende una rete neurale e ne crea una copia con una mutazione in base al metodo contenuto in
         self.mutation_method
 
-        :param net: neural net che sara' copiata
-        :return: neural net uguale al param net, fatta eccezione per le parti mutate
+        :param net (NeuralNetwork): neural net che sara' copiata
+        :return (NeuralNetwork): neural net uguale al parametro net, fatta eccezione per le parti mutate
         """
         res = copy.deepcopy(net)                    # crea una copia altrimenti manipoliamo la rete reale
         weights_or_biases = random.randint(0, 1)    # sceglie casualmente se la mutazione e' su peso/neurone OPPURE su bias

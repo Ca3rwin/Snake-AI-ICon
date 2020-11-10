@@ -38,7 +38,7 @@ class Map:
             self.snake.grow()                                           # il serpente cresce e viene creato nuovo cibo
             self.add_food(random.randint(0, SPRITE_NUMBER - 1),
                           random.randint(0, SPRITE_NUMBER - 1))
-        elif snake_pos == WALL:                                         # se la testa del serpente è su una parete, muore
+        elif snake_pos == WALL:                                         # se la testa del serpente e' su una parete, muore
             self.snake.alive = False
 
     def add_food(self, block_x, block_y):
@@ -81,29 +81,27 @@ class Map:
                     window.blit(food, (x, y))
                 num_case += 1
             num_line += 1
-        self.snake.render(window)         # il serpente verrà renderizzato sopra la mappa
+        self.snake.render(window)         # il serpente verra' renderizzato sopra la mappa
 
 
 
     def scan(self):
         """
-        Controlla lo stato della partita e lo mette nella variabile 'scan' (lista di liste), che verra' poi passata alla neural net
+        Controlla lo stato della partita e lo mette nella variabile ``scan`` (lista di liste), che verra' poi passata alla neural net
 
         NB:\n
         - I primi 7 input sono per la parete, i successivi 7 per il cibo, gli ultimi 7 per il corpo del serpente
         - Il cibo e' visto attraverso tutta la mappa, mentre pareti e corpo del serpente sono visti solo ad una distanza di
           massimo 10 blocchi dalla testa
-
-        :return: niente ma rende la mappa visibile alla neural net
         """
         def scan_wall(direction_x, direction_y, direction_range):
             """
             Controlla se c'e' una parete nella direzione data nei parametri entro 10 blocchi
 
-            :param direction_x: direzione nell'asse x, puo' essere 1, 0 o -1 per "destra", "dritto" e "sinistra"
-            :param direction_y: direzione nell'asse y, puo' essere 1, 0 o -1 per "giù", "dritto" o "su"
-            :param direction_range: range massimo da controllare
-            :return: int con valore 0 se non e' stata trovata una parete, altrimenti ha come valore 1/distanza dalla parete
+            :param direction_x (array di int): Direzione nell'asse x, puo' essere 1, 0 o -1 per "destra", "dritto" e "sinistra"
+            :param direction_y (array di int): Direzione nell'asse y, puo' essere 1, 0 o -1 per "giu'", "dritto" o "su"
+            :param direction_range (int): Range massimo da controllare
+            :return (int): 0 se non e' stata trovata una parete, altrimenti ha come valore 1/distanza dalla parete
             """
             res = 0
             for i in range(1, 10):                      # controlla fino a 10 blocchi di distanza
@@ -115,14 +113,14 @@ class Map:
                         res = 1 / distance((head_x, head_y), (step_x, step_y))  # ritorna 1/distanza dal blocco
             return res
 
-        def scan_iself(direction_x, direction_y, direction_range):
+        def scan_self(direction_x, direction_y, direction_range):
             """
             Controlla se c'e' il corpo del serpente nella direzione data nei parametri entro 10 blocchi
 
-            :param direction_x: direzione nell'asse x, puo' essere 1, 0 o -1 per "destra", "dritto" e "sinistra"
-            :param direction_y: direzione nell'asse y, puo' essere 1, 0 o -1 per "giù", "dritto" o "su"
-            :param direction_range: range massimo da controllare
-            :return: int con valore 0 se non e' stata trovata una parete, altrimenti ha come valore 1/distanza dal corpo
+            :param direction_x (array di int): Direzione nell'asse x, puo' essere 1, 0 o -1 per "destra", "dritto" e "sinistra"
+            :param direction_y (array di int): Direzione nell'asse y, puo' essere 1, 0 o -1 per "giu'", "dritto" o "su"
+            :param direction_range (int): Range massimo da controllare
+            :return (int): 0 se non e' stata trovata una parete, altrimenti ha come valore 1/distanza dal corpo
             """
             res = 0
             for i in range(1, 10):
@@ -136,12 +134,12 @@ class Map:
 
         def scan_food(direction_x, direction_y, direction_range):
             """
-            Controlla se c'e' del cibo nella direzione data nei parametri finché entro ``direction_range`` blocchi
+            Controlla se c'e' del cibo nella direzione data nei parametri finche' entro ``direction_range`` blocchi
 
-            :param direction_x: direzione nell'asse x, puo' essere 1, 0 o -1 per "destra", "dritto" e "sinistra"
-            :param direction_y: direzione nell'asse y, puo' essere 1, 0 o -1 per "giù", "dritto" o "su"
-            :param direction_range: range massimo da controllare
-            :return: int con valore 0 se non e' stata trovata una parete, altrimenti ha come valore 1/distanza dal cibo
+            :param direction_x (array di int): Direzione nell'asse x, puo' essere 1, 0 o -1 per "destra", "dritto" e "sinistra"
+            :param direction_y (array di int): Direzione nell'asse y, puo' essere 1, 0 o -1 per "giu'", "dritto" o "su"
+            :param direction_range (int): Range massimo da controllare
+            :return (int): 0 se non e' stata trovata una parete, altrimenti ha come valore 1/distanza dal cibo
             """
             res = 0
             for i in range(1, direction_range):
@@ -158,11 +156,11 @@ class Map:
         food_y = self.food[1]
 
         forward_x = self.snake.direction[0]         # calcola ogni coordinata per tutte e 7 le direzioni
-        forward_y = self.snake.direction[1]         # questo perché il serpente vede in "prima persona"
+        forward_y = self.snake.direction[1]         # questo perche' il serpente vede in "prima persona"
         right_x = -forward_y
         right_y = forward_x
         left_x = forward_y                          # per esempio, se il serpente guarda nella direzione [1,0] (giu')
-        left_y = -forward_x                         # la sua sinistra è [1,0] (destra per noi che guardiamo "dall'alto")
+        left_y = -forward_x                         # la sua sinistra e' [1,0] (destra per noi che guardiamo "dall'alto")
         forward_right_x = forward_x + right_x
         forward_right_y = forward_y + right_y
         forward_left_x = forward_x + left_x
@@ -214,9 +212,9 @@ def distance(p1=None, p2=None):
     Fornisce la distanza euclidea fra due punti\n
     @jit e' utilizzato per velocizzare l'elaborazione
 
-    :param p1: punto d'origine
-    :param p2: punto finale
-    :return: distanza
+    :param p1 (array di int): Punto d'origine
+    :param p2 (array di int): Punto finale
+    :return (int): Distanza
     """
     return math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
 

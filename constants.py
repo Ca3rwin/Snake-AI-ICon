@@ -1,6 +1,6 @@
 """
 constants.py
-~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 Modulo contenente tutte le costanti del gioco di snake
 """

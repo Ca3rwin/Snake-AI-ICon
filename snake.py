@@ -1,22 +1,15 @@
-# Valentin Macé
-# valentin.mace@kedgebs.com
-# Developed for fun
-# Feel free to use this code as you wish as long as you quote me as author
-
 """
 snake.py
 ~~~~~~~~~~
 
-This module is for building the snake itself in the snake game
+Questo modulo e' utilizzato per creare il serpente nel gioco
 
-The snake:
-- Is on the form of a list, each element for a body block (containing its coordinates)
-- Has a head pointing on the first block, a direction and also a neural network (brain)
-- Has vision given by the map (Map.scan method)
-- Is in charge of moving its blocks, aging, growing by adding a block to the right place
-  and makes decision with neural net
-- Gives its fitness based on self age and length
-
+Il serpente:\n
+- E' codificato come una lista, ogni elemento e' un blocco del corpo (contenente le sue coordinate)
+- Ha una testa che punta al primo blocco, una direzione e viene passato alla rete neurale
+- Ha visione della mappa (metodo ``map.scan()``)
+- Gestisce il proprio movimento, invecchia e cresce mettendo un nuovo blocco alla sua coda quando mangia
+- Ritorna il proprio fitness in base alla propria eta' e lunghezza
 """
 
 from neural_network import *
@@ -27,25 +20,25 @@ class Snake:
 
     def __init__(self, neural_net=None, xMaxSize = 20, yMaxSize = 20):
         """
-        :param neural_net: NeuralNet given to the snake in charge of decisions (AI)
+        Funzione di inizializzazione
+        
+        :param neural_net (NeuralNetwork): Neural net che dovra' gestire il movimento del serpente
         """
-        self.body = [[10, 10], [9, 10], [9, 11], [9, 12]]       # the snake is in fact a list of coordinates
-        self.head = self.body[0][:]                             # first body block
-        self.old_tail = self.head[:]                            # useful to grow
+        self.body = [[10, 10], [9, 10], [9, 11], [9, 12]]       # il serpente e' una lista di coordinate
+        self.head = self.body[0][:]                             # blocco della testa
+        self.old_tail = self.head[:]                            # utile per la crescita
         self.direction = RIGHT
         self.age = 0
-        self.starve = 500                                       # useful to avoid looping AI snakes
+        self.starve = 500                                       # utile per evitare che il serpente vada in loop infinito
         self.alive = True
         self.neural_net = neural_net
-        self.vision = []                                        # holds the map.scan() and is used by the neural net
+        self.vision = []                                        # memorizza lo stato della mappa ad ogni momento
         self.xMaxSize = xMaxSize
         self.yMaxSize = yMaxSize
 
     def update(self):
-        """
-        Actualize the snake through time, making it older and more hungryat each game iteration,
-        sorry snek
-        """
+        """ Gestisce l'eta' e la fame del serpente, che ad ogni iterazione diventera' piu' vecchio e affamato """
+        
         self.age += 1
         self.starve -= 1
         if self.starve < 1:
@@ -54,35 +47,33 @@ class Snake:
 
     def grow(self):
         """
-        Makes snake grow one block longer
-        Called by map.update() when snake's head is in collision with food
+        Fa crescere il serpente di un blocco\n
+        Chiamato da ``map.update()`` quando la testa del serpente collide con del cibo
         """
-        self.starve = 500                   # useful to avoid looping AI snakes (they die younger -> bad fitness)
-        self.body.append(self.old_tail)     # that's why I keep old_tail
+        self.starve = 500                   # utile per evitare che i serpenti vadano in loop infinito
+        self.body.append(self.old_tail)     # mette un nuovo blocco in append alla coda
 
     def move(self):
-        """
-        Makes the snake move, head moves in current direction and each blocks replace its predecessor
-        """
-        self.old_tail = self.body[-1][:]        # save old position of last block
-        self.head[0] += self.direction[0]       # moves head
+        """ Fa muovere il serpente, la testa si muove nella direzione attuale ed ogni blocco sostituisce il predecessore """
+        self.old_tail = self.body[-1][:]        # salva la precedente posizione dell'ultimo blocco
+        self.head[0] += self.direction[0]       # muove la testa
         self.head[1] += self.direction[1]
         
         self.head[0] = (self.head[0] + self.xMaxSize) % self.xMaxSize
         self.head[1] = (self.head[1] + self.yMaxSize) % self.yMaxSize
         
-        if self.head in self.body[1:]:          # if snakes hits himself
+        if self.head in self.body[1:]:          # se il serpente si colpisce muore
             self.alive = False
-        self.body.insert(0, self.body.pop())    # each block is replace by predecessor
-        self.body[0] = self.head[:]             # first block is head
+        self.body.insert(0, self.body.pop())    # ogni blocco rimpiazza il predecessore
+        self.body[0] = self.head[:]             # il primo blocco e' la testa
 
     def turn_right(self):
         """
-        Makes the snake direction to the right of the current direction
-        Current direction = [x,y], turn_right gives [-y,x]
-
-        Example:
-        If [0,1] (down) is current direction, [-1,0] (right) is new direction
+        Fa girare il serpente alla propria destra rispetto alla direzione attuale\n
+        Se direzione attuale = [x,y], ``turn_right()`` ritorna [-y,x]
+        
+        **Esempio:**
+        Se [0,1] (giu') e' la direzione attuale, [-1,0] (destra) e' la nuova direzione
         """
         temp = self.direction[0]
         self.direction[0] = -self.direction[1]
@@ -90,8 +81,8 @@ class Snake:
 
     def turn_left(self):
         """
-        Makes the snake direction to the right of the current direction
-        Current direction = [x,y], turn_right gives [y,-x]
+        Fa girare il serpente alla propria destra rispetto alla direzione attuale\n
+        Se direzione attuale = [x,y], ``turn_left()`` ritorna [y,-x]
         """
         temp = self.direction[0]
         self.direction[0] = self.direction[1]
@@ -99,8 +90,8 @@ class Snake:
 
     def AI(self):
         """
-        Makes decision for the snake direction according to its current vision
-        Vision is given to the NeuralNetwork and most activated output neuron is considered as decision
+        Decide la direzione del serpente in base alla sua attuale visione della mappa\n
+        Il neurone di output piu' attivato e' la sua decisione
         """
         decision = np.argmax(self.neural_net.feed_forward(self.vision))
         if decision == 1:
@@ -110,25 +101,20 @@ class Snake:
 
     def fitness(self):
         """
-        Measures how well the snake is doing as a function of its length and age
+        Misura quanto e' stato bravo il serpente come funzione della propria lunghezza ed eta'
 
-        Note:
-        - You can be creative with the formula and find a better solution
-        - It has a big impact on the genetic algorithm
-
-        :return: integer representing how good the snake is performing
+        :return (int): Punteggio (fitness)
         """
         return (len(self.body)**2) * self.age
 
     def render(self, window):
         """
-        Renders the map (background, walls and food) on the window surface and calls render() of snake
-        Very very very unoptimized since render does not affect the genetic algorithm
+        Renderizza la mappa (sfondo, pareti e cibo) nella finestra di gioco e chiama ``render()`` del serpente
 
-        :param window: surface window
+        :param window: Finestra di gioco
         """
-        body = pygame.image.load(IMAGE_SNAKE).convert_alpha()                   # loading image
+        body = pygame.image.load(IMAGE_SNAKE).convert_alpha()                   # caricamento immagine
         for block in self.body:
-            window.blit(body, (block[0]*SPRITE_SIZE, block[1]*SPRITE_SIZE))     # painting a beautiful snek
-        if self.neural_net:                                                     # calls for neural net rendering
+            window.blit(body, (block[0]*SPRITE_SIZE, block[1]*SPRITE_SIZE))     # rendering del serpente
+        if self.neural_net:                                                     # chiama il rendering della rete neurale a destra della finestra
             self.neural_net.render(window, self.vision)

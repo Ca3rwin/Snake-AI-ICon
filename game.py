@@ -2,7 +2,7 @@
 game.py
 ~~~~~~~~~~
 
-Il modulo definisce una partita di snake, che puo' essere visualizzata o meno, giocabile o meno
+Il modulo definisce una partita di snake, che puo' essere visualizzata o meno, giocabile o meno\n
 Viene utilizzato Pygame
 """
 
@@ -22,11 +22,11 @@ class Game:
         """
         Funzione principale del gioco
         
-        :param display: boolean mostrare o meno la partita
-        :param neural_net: NeuralNetwork da passare in input perche' giochi la partita
-        :param playable: boolean per giocare manualmente la partita
-        :param speed: int velocita' della partita
-        :return: int score
+        :param display (boolean): Mostra o meno la partita
+        :param neural_net (NeuralNetwork): Neural net da passare in input perche' giochi la partita
+        :param playable (boolean): Utile per giocare manualmente la partita
+        :param speed (int): Velocita' della partita
+        :return (int): Punteggio
         """
         if not display:
             return self.run_invisible(neural_net=neural_net)
@@ -43,8 +43,8 @@ class Game:
         """
         Esegue una partita non visibile giocata dalla neural net
 
-        :param neural_net: NeuralNetwork che giochera' la partita
-        :return: int score
+        :param neural_net (NeuralNetwork): Neural net che giochera' la partita
+        :return (int): Punteggio
         """
         snake = Snake(neural_net=neural_net)        # creazione snake
         map = Map(snake)                            # creazione mappa
@@ -66,10 +66,10 @@ class Game:
         """
         Esegue una partita non visibile giocata dalla neural net o manualmente
 
-        :param playable: boolean per giocare manualmente o meno
-        :param neural_net: NeuralNetwork che giochera' alla partita
-        :param speed: int velocita' della partita
-        :return: int score
+        :param playable (boolean): Utile per giocare manualmente la partita
+        :param neural_net (NeuralNetwork): Neural net che giochera' la partita
+        :param speed (int): Velocita' della partita
+        :return (int): Punteggio
         """
         pygame.init()                                                               # inizializzazione pygame
         game_window = pygame.display.set_mode((int(WINDOW_SIZE*2), WINDOW_SIZE))    # apre la finestra

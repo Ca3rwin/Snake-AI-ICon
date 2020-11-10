@@ -1,10 +1,10 @@
 """
 neural_network.py
-~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
-Questo modulo è utilizzato per la costruzione di DNN
+Questo modulo e' utilizzato per la costruzione di DNN
 
-Pesi e bias sono inizializzati casualmente secondo una distribuzione di Gauss
+Pesi e bias sono inizializzati casualmente secondo una distribuzione di Gauss\n
 Una neural net puo' essere salvata e caricata a piacimento
 
 Non viene implementata la back-propagation dato che utilizzeremo l'algoritmo genetico
@@ -24,7 +24,7 @@ class NeuralNetwork:
         """
         Funzione d'inizializzazione
         
-        :param shape: lista di int, descrive i layer e i neuroni per layer della neural net
+        :param shape (lista di int): Descrive i layer e i neuroni per layer della neural net
         """
         self.shape = shape
         self.biases = []
@@ -40,8 +40,8 @@ class NeuralNetwork:
         """
         Funzione principale, prende un vettore input e ne calcola l'output tramite forward-propagation
 
-        :param a: colonna di integer, input per la neural net (visione del serpente)
-        :return: colonna di integer, attivazione dei neuroni output
+        :param a (array di int): Input per la neural net (visione del serpente)
+        :return (array di int): Attivazione dei neuroni output
         """
         for b, w in zip(self.biases, self.weights):
             a = sigmoid(np.dot(w, a)+b)
@@ -51,8 +51,7 @@ class NeuralNetwork:
         """
         Salva i pesi e bias in due file separati nella cartella attuale
 
-        :param name: stringa, in caso volessi darle un nome
-        :return: crea due file
+        :param name (stringa): Nome da dare al file
         """
         if not name:
             np.save('saved_weights_'+str(self.score), self.weights)
@@ -65,8 +64,8 @@ class NeuralNetwork:
         """
         Carica pesi e bias di neural net salvate da 2 file all'interno dell'oggetto neural net
 
-        :param filename_weights: file contenente i pesi salvati
-        :param filename_biases: file contenente i bias salvati
+        :param filename_weights (file): File contenente i pesi salvati
+        :param filename_biases (file): File contenente i bias salvati
         """
         self.weights = np.load(filename_weights, allow_pickle=True)
         self.biases = np.load(filename_biases, allow_pickle=True)
@@ -75,11 +74,11 @@ class NeuralNetwork:
         """
         Mostra la neural net allo stato corrente nella parte destra della finestra di gioco
 
-        La funzione supporta qualsiasi forma di neural net fintantoche' i neuroni di input e output siano quelli giusti (21 di input, 3 di output)
-        I plan to work on it for later projects
+        La funzione supporta qualsiasi forma di neural net fintantoche' i neuroni di input e output siano quelli giusti
+        (21 di input, 3 di output)
 
-        :param window: finestra di gioco
-        :param vision: lista di int, "vista" del serpente necessaria a mostrare gli input
+        :param window: Finestra di gioco
+        :param vision (lista di int): Lista di int, "vista" del serpente necessaria a mostrare gli input
         """
         network = [np.array(vision)]            # conterra' tutte le attivazioni dei neuroni per ogni layer
         for i in range(len(self.biases)):
