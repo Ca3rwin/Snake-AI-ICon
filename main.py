@@ -5,29 +5,60 @@ main.py
 File main del progetto
 
 Puoi decidere di eseguire una rete neurale o di startare l'algoritmo genetico per generare weights & biases,
-decommentare ciò che serve e commentare ciò che non serve
+decommentare cio' che serve e commentare cio' che non serve
 """
-from game import*
+from game import *
 from genetic_algorithm import *
 
+def load_ivan():
+    """ Carica ed esegue pesi e bias del migliore di ognuna delle 10 generazioni di Ivan """
+    
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_1_weights.npy',
+          filename_biases='saved/ivan(200,layer,neuron,10)/gen_1_biases.npy')
+    game.start(display=True, neural_net=net)
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_2_weights.npy',
+          filename_biases='saved/ivan(200,layer,neuron,10)/gen_2_biases.npy')
+    game.start(display=True, neural_net=net)
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_3_weights.npy',
+              filename_biases='saved/ivan(200,layer,neuron,10)/gen_3_biases.npy')
+    game.start(display=True, neural_net=net)
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_4_weights.npy',
+              filename_biases='saved/ivan(200,layer,neuron,10)/gen_4_biases.npy')
+    game.start(display=True, neural_net=net)
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_5_weights.npy',
+              filename_biases='saved/ivan(200,layer,neuron,10)/gen_5_biases.npy')
+    game.start(display=True, neural_net=net)
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_6_weights.npy',
+              filename_biases='saved/ivan(200,layer,neuron,10)/gen_6_biases.npy')
+    game.start(display=True, neural_net=net)
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_7_weights.npy',
+              filename_biases='saved/ivan(200,layer,neuron,10)/gen_7_biases.npy')
+    game.start(display=True, neural_net=net)
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_8_weights.npy',
+              filename_biases='saved/ivan(200,layer,neuron,10)/gen_8_biases.npy')
+    game.start(display=True, neural_net=net)
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_9_weights.npy',
+              filename_biases='saved/ivan(200,layer,neuron,10)/gen_9_biases.npy')
+    game.start(display=True, neural_net=net)
+    net.load(filename_weights='saved/ivan(200,layer,neuron,10)/gen_10_weights.npy',
+              filename_biases='saved/ivan(200,layer,neuron,10)/gen_10_biases.npy')
+    game.start(display=True, neural_net=net)
 
 """
-Watch games of snake played by my best neural nets !
-
-Only 3 games are played here but you can load more networks from the saved folder if you wish
+Decommentare le reti che si vogliono eseguire
 """
 net = NeuralNetwork()
 game = Game()
 
-# # Joseph (NON VA MOLTO BENE 5/10) is the funniest to watch, he always does something cool
+# # Joseph (NON VA MOLTO BENE 5/10)
 # net.load(filename_weights='saved/joseph_weights.npy', filename_biases='saved/joseph_biases.npy')
 # game.start(display=True, neural_net=net)
 
-# # Valentin (VA MOLTO BENE 8/10) is safe and precise
+# # Valentin (VA MOLTO BENE 8/10 SICURO E PRECISO)
 # net.load(filename_weights='saved/valentin_weights.npy', filename_biases='saved/valentin_biases.npy')
 # game.start(display=True, neural_net=net)
 
-# # Larry (VA IN LOOP PORCODIO 3/10) is very very safe but also my best network, don't hesitate to run him a few times if he's doing loops
+# # Larry (VA IN LOOP MOLTO SPESSO MA QUANDO NON CI VA E' IL MIGLIORE 5/10)
 # net.load(filename_weights='saved/larry_weights.npy', filename_biases='saved/larry_biases.npy')
 # game.start(display=True, neural_net=net)
 
@@ -47,33 +78,24 @@ game = Game()
 # net.load(filename_weights='saved/kevin_weights.npy', filename_biases='saved/kevin_biases.npy')
 # game.start(display=True, neural_net=net)
 
-# net.load(filename_weights='a_gen_10_weights.npy', filename_biases='a_gen_1_biases.npy')
-# game.start(display=True, neural_net=net)
+# # Ivan (CARICA 10 GENERAZIONI - SOLO L'ULTIMA GEN VA BENE 6/10)
+# load_ivan()
 
 
 """
-Play a game of snake !
-
-I do not recommend it as it is in first person and not that fun
-But if you want, you can
+Decommenta per giocare a snake
 """
 
 # game = Game()
 # game.start(playable=True, display=True, speed=10)
   
 """
-Train your own snakes !
+Algoritmo genetico
 
-Starts the genetic algorithm with parameters that I've already tested
-Best snake of each generation is saved in current folder
-The training speed depend a lot on your CPU and its cores number
-
-Contact me if you know how to make it run on GPU
+Decommentare per trainare delle nuove reti neurali
 """
-gen = GeneticAlgorithm(population_size=1000, crossover_method='neuron', mutation_method='weight')
-gen.start()
+# gen = GeneticAlgorithm(population_size=1000, crossover_method='neuron', mutation_method='weight', generation_number=10)
+# gen.start()
 
-# Hey pssst, you, yes you.. Sometimes I boost training by making the snake already huge at the begining
-# Also don't hesitate to put a iteration limit in the game loop (see game.py)
 
-game.endGame()
+game.endGame() # Chiude pygame

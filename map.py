@@ -1,22 +1,13 @@
-# Valentin Macé
-# valentin.mace@kedgebs.com
-# Developed for fun
-# Feel free to use this code as you wish as long as you quote me as author
-
 """
 map.py
 ~~~~~~~~~~
 
-This module is for building map for the snake game
+Questo modulo e' utilizzato per la creazione della mappa del gioco
 
-The map:
-- Contains its structure in a matrix form (see MAP in constants.py)
-- Contains a instance of a snake and an instance of a food
-- Is in charge of managing collisions, creation of food and giving vision to the snake
-
-Notes:
-- Some choices might seems weird in term of conception but I built it with priority for performance
-      since the GA is greedy
+La mappa:\n
+- Contiene la propria morfologia in una matrice (vedi MAP in constants.py)
+- Contiene un'istanza di snake ed una di food (il cibo spawna uno per volta)
+- Si occupa della gestione delle collisioni, creazione di cibo e di passare ogni stato della partita alla neural net
 """
 
 import traceback
@@ -30,24 +21,24 @@ class Map:
     """Map class"""
 
     def __init__(self, snake):
-        self.structure = MAP                                            # matrix of 0 and 1 representing the map
-        self.snake = snake                                              # snake evolving in the map
-        self.food = [random.randint(8, 12), random.randint(8, 12)]      # food (list of 2 coordinates)
+        self.structure = MAP                                            # matrice di 0 ed 1 rappresentanti la mappa
+        self.snake = snake                                              # il serpente che si muove e cresce nella mappa
+        self.food = [random.randint(8, 12), random.randint(8, 12)]      # cibo, lista di 2 coordinate (viene inizializzato relativamente vicino al centro della mappa)
 
     def update(self):
         """
-        Checks for collision between snake's head and walls or food
-        Takes the right action in case of collision
+        Controlla se ci sono collisioni fra la testa del serpente ed una parete o del cibo\n
+        Aggiorna lo stato della partita in caso di collisione
         """
         snake_head_x, snake_head_y = self.snake.head
         snake_pos = self.structure[snake_head_y][snake_head_x]
         # print("snake_head_x POST")
         # print(snake_head_x)
-        if [snake_head_x, snake_head_y] == self.food:                   # if snake's head is on food
-            self.snake.grow()                                           # snake grows and new food is created
+        if [snake_head_x, snake_head_y] == self.food:                   # se la testa del serpente si trova su del cibo
+            self.snake.grow()                                           # il serpente cresce e viene creato nuovo cibo
             self.add_food(random.randint(0, SPRITE_NUMBER - 1),
                           random.randint(0, SPRITE_NUMBER - 1))
-        elif snake_pos == WALL:                                         # if snake's head is on wall, snek is ded
+        elif snake_pos == WALL:                                         # se la testa del serpente è su una parete, muore
             self.snake.alive = False
 
     def add_food(self, block_x, block_y):
