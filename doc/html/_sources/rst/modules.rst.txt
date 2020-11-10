@@ -1,0 +1,11 @@
+source
+======
+
+.. toctree::
+   :maxdepth: 4
+
+   game
+   genetic_algorithm
+   map
+   neural_network
+   snake

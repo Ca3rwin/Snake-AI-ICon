@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>snake module &#8212; Snake-AI 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="neural_network module" href="neural_network.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-snake">
+<span id="snake-module"></span><h1>snake module<a class="headerlink" href="#module-snake" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="snake-py">
+<h2>snake.py<a class="headerlink" href="#snake-py" title="Permalink to this headline">¶</a></h2>
+<p>Questo modulo e’ utilizzato per creare il serpente nel gioco</p>
+<p>Il serpente:</p>
+<ul class="simple">
+<li><p>E’ codificato come una lista, ogni elemento e’ un blocco del corpo (contenente le sue coordinate)</p></li>
+<li><p>Ha una testa che punta al primo blocco, una direzione e viene passato alla rete neurale</p></li>
+<li><p>Ha visione della mappa (metodo <code class="docutils literal notranslate"><span class="pre">map.scan()</span></code>)</p></li>
+<li><p>Gestisce il proprio movimento, invecchia e cresce mettendo un nuovo blocco alla sua coda quando mangia</p></li>
+<li><p>Ritorna il proprio fitness in base alla propria eta’ e lunghezza</p></li>
+</ul>
+<dl class="py class">
+<dt id="snake.Snake">
+<em class="property">class </em><code class="sig-prename descclassname">snake.</code><code class="sig-name descname">Snake</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">neural_net</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xMaxSize</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">yMaxSize</span><span class="o">=</span><span class="default_value">20</span></em><span class="sig-paren">)</span><a class="headerlink" href="#snake.Snake" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Snake Class</p>
+<dl class="py method">
+<dt id="snake.Snake.AI">
+<code class="sig-name descname">AI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#snake.Snake.AI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide la direzione del serpente in base alla sua attuale visione della mappa</p>
+<p>Il neurone di output piu’ attivato e’ la sua decisione</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="snake.Snake.fitness">
+<code class="sig-name descname">fitness</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#snake.Snake.fitness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Misura quanto e’ stato bravo il serpente come funzione della propria lunghezza ed eta’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return (int)</dt>
+<dd class="field-odd"><p>Punteggio (fitness)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="snake.Snake.grow">
+<code class="sig-name descname">grow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#snake.Snake.grow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fa crescere il serpente di un blocco</p>
+<p>Chiamato da <code class="docutils literal notranslate"><span class="pre">map.update()</span></code> quando la testa del serpente collide con del cibo</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="snake.Snake.move">
+<code class="sig-name descname">move</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#snake.Snake.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fa muovere il serpente, la testa si muove nella direzione attuale ed ogni blocco sostituisce il predecessore</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="snake.Snake.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window</span></em><span class="sig-paren">)</span><a class="headerlink" href="#snake.Snake.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renderizza la mappa (sfondo, pareti e cibo) nella finestra di gioco e chiama <code class="docutils literal notranslate"><span class="pre">render()</span></code> del serpente</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>window</strong> – Finestra di gioco</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="snake.Snake.turn_left">
+<code class="sig-name descname">turn_left</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#snake.Snake.turn_left" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fa girare il serpente alla propria destra rispetto alla direzione attuale</p>
+<p>Se direzione attuale = [x,y], <code class="docutils literal notranslate"><span class="pre">turn_left()</span></code> ritorna [y,-x]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="snake.Snake.turn_right">
+<code class="sig-name descname">turn_right</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#snake.Snake.turn_right" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fa girare il serpente alla propria destra rispetto alla direzione attuale</p>
+<p>Se direzione attuale = [x,y], <code class="docutils literal notranslate"><span class="pre">turn_right()</span></code> ritorna [-y,x]</p>
+<p><strong>Esempio:</strong>
+Se [0,1] (giu’) e’ la direzione attuale, [-1,0] (destra) e’ la nuova direzione</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="snake.Snake.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#snake.Snake.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gestisce l’eta’ e la fame del serpente, che ad ogni iterazione diventera’ piu’ vecchio e affamato</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Snake-AI</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">source</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="game.html">game module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="genetic_algorithm.html">genetic_algorithm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map.html">map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural_network.html">neural_network module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">snake module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">source</a><ul>
+      <li>Previous: <a href="neural_network.html" title="previous chapter">neural_network module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ivan Valluzzi, Antonio Scardavilli.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/rst/snake.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

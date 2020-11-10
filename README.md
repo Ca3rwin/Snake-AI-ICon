@@ -1,60 +1,48 @@
 # Snake
->Neural Networks playing snake game trained by genetic algorithm
+> Reti neurali che giocano a snake addestrate da algoritmi genetici
 
-<p align="center">
-  <img src="./animation.gif">
+<p align = "center">
+   <img src = "./animation.gif">
 </p>
 
-A personal project made by Robin Mancini and myself, consisting in training neural networks to play the game "Snake"
 
-This repository contains:
-- The Snake Game itself
-- A Genetic Algorithm module
-- A Neural Network module
-- A main file with toy examples
+Un progetto personale fatto da Antonio Scardavilli e Ivan Valluzzi, consistente nell'addestrare reti neurali per giocare al gioco "Snake"
 
-I timed most functions to be sure to improve speed and used numba jit for compiling some functions, the genetic algorithm is parallelized for its main part (snakes evaluation) using multiprocessing and joblib
+Questo progetto contiene:
+- Il gioco di Snake
+- Un modulo che implementa l'algoritmo genetico
+- Un modulo che implementa la rete neurale
+- Un file principale con esempi
 
+L'algoritmo genetico è parallelizzato per la sua parte principale (valutazione dei serpenti) usando multiprocessing e ``joblib``.
 
-## Installation
+## Installazione
 
-Python 3 was used for this project and I can't promess that older versions are compatibles
+E' stato utilizzato Phyton 3 per questo progetto e non siamo sicuri che le versioni precedenti siano compatibili
 
-Libraries you'll need to run the project:
+Librerie necessarie per eseguire il progetto:
 
-{``joblib``, ``numpy``, ``numba``, ``pygame``}
+{`` joblib``, `` numpy``, `` numba``, `` pygame``}
 
-Clone the repo using
+## Utilizzo
 
-```sh
-git clone https://github.com/valentinmace/snake.git
-```
+Troverai alcuni esempi pronti per l'esecuzione nel file `` main.py``.
 
-## Usage
+Puoi provare a:
+- Giocare a Snake
+- Addestrare le tue reti neurali (può volerci del tempo per ottenere buoni risultati)
+- Eseguire una partita giocata da reti neurali che abbiamo addestrato e selezionato perché più interessanti.
 
-You will find some ready to run examples in ``main.py`` file.
-
-You can try to:
-- Play snake
-- Train your own neural networks (it can take a while to get good results)
-- Display a game played by neural networks that I trained and selected four you
-
-Everything is explaind in the file, just uncomment parts that you want to execute, then go to terminal and do:
+Tutto è spiegato nel file, basta decommentare le parti che vuoi eseguire, quindi vai al terminale e esegui:
 ```sh
 python main.py
 ```
 
-## Notes
+## Documentazione
 
-Do not hesitate to contact me if you need some help
+Per visionare la documentazione del progetto aprire il file:
 
-Everything is made by me, I did not want to use existing framework for the genetic algorithm or neural network for learning purposes. I also coded the game with performance in mind rather than conception elegance.
+```sh
+doc/html/index.html
+```
 
-I have published (or will publish depending on when you read this) a serie of youtube tutorial videos on [my channel](https://www.youtube.com/channel/UCMIW0JKxoxBDM5yiiF17SrA) (in french)
-
-
-## Meta
-
-Valentin Macé – [LinkedIn](https://www.linkedin.com/in/valentin-mac%C3%A9-310683165/) – [YouTube](https://www.youtube.com/channel/UCMIW0JKxoxBDM5yiiF17SrA) – [Twitter](https://twitter.com/ValentinMace) - valentin.mace@kedgebs.com
-
-Distributed under the MIT license. See ``LICENSE`` for more information.

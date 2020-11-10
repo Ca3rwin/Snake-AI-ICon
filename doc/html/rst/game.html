@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>game module &#8212; Snake-AI 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="genetic_algorithm module" href="genetic_algorithm.html" />
+    <link rel="prev" title="source" href="modules.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-game">
+<span id="game-module"></span><h1>game module<a class="headerlink" href="#module-game" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="game-py">
+<h2>game.py<a class="headerlink" href="#game-py" title="Permalink to this headline">¶</a></h2>
+<p>Il modulo definisce una partita di snake, che puo’ essere visualizzata o meno, giocabile o meno</p>
+<p>Viene utilizzato Pygame</p>
+<dl class="py class">
+<dt id="game.Game">
+<em class="property">class </em><code class="sig-prename descclassname">game.</code><code class="sig-name descname">Game</code><a class="headerlink" href="#game.Game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Game Class</p>
+<dl class="py method">
+<dt id="game.Game.endGame">
+<code class="sig-name descname">endGame</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#game.Game.endGame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="game.Game.inputs_management">
+<code class="sig-name descname">inputs_management</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">snake</span></em>, <em class="sig-param"><span class="n">cont</span></em><span class="sig-paren">)</span><a class="headerlink" href="#game.Game.inputs_management" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gestione degli input da tastiera</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="game.Game.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window</span></em>, <em class="sig-param"><span class="n">map</span></em><span class="sig-paren">)</span><a class="headerlink" href="#game.Game.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renderizza la partita</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="game.Game.run_invisible">
+<code class="sig-name descname">run_invisible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">neural_net</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#game.Game.run_invisible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Esegue una partita non visibile giocata dalla neural net</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>(</strong><strong>NeuralNetwork</strong><strong>)</strong> (<em>neural_net</em>) – Neural net che giochera’ la partita</p>
+</dd>
+<dt class="field-even">Return (int)</dt>
+<dd class="field-even"><p>Punteggio</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="game.Game.run_visible">
+<code class="sig-name descname">run_visible</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">playable</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">neural_net</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">speed</span><span class="o">=</span><span class="default_value">20</span></em><span class="sig-paren">)</span><a class="headerlink" href="#game.Game.run_visible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Esegue una partita non visibile giocata dalla neural net o manualmente</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>boolean</strong><strong>)</strong> (<em>playable</em>) – Utile per giocare manualmente la partita</p></li>
+<li><p><strong>(</strong><strong>NeuralNetwork</strong><strong>)</strong> (<em>neural_net</em>) – Neural net che giochera’ la partita</p></li>
+<li><p><strong>(</strong><strong>int</strong><strong>)</strong> (<em>speed</em>) – Velocita’ della partita</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return (int)</dt>
+<dd class="field-even"><p>Punteggio</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="game.Game.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">neural_net</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">playable</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">speed</span><span class="o">=</span><span class="default_value">20</span></em><span class="sig-paren">)</span><a class="headerlink" href="#game.Game.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Funzione principale del gioco</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>boolean</strong><strong>)</strong> (<em>playable</em>) – Mostra o meno la partita</p></li>
+<li><p><strong>(</strong><strong>NeuralNetwork</strong><strong>)</strong> (<em>neural_net</em>) – Neural net da passare in input perche’ giochi la partita</p></li>
+<li><p><strong>(</strong><strong>boolean</strong><strong>)</strong> – Utile per giocare manualmente la partita</p></li>
+<li><p><strong>(</strong><strong>int</strong><strong>)</strong> (<em>speed</em>) – Velocita’ della partita</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return (int)</dt>
+<dd class="field-even"><p>Punteggio</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Snake-AI</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">source</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">game module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="genetic_algorithm.html">genetic_algorithm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map.html">map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural_network.html">neural_network module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="snake.html">snake module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">source</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">source</a></li>
+      <li>Next: <a href="genetic_algorithm.html" title="next chapter">genetic_algorithm module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ivan Valluzzi, Antonio Scardavilli.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/rst/game.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>genetic_algorithm module &#8212; Snake-AI 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="map module" href="map.html" />
+    <link rel="prev" title="game module" href="game.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-genetic_algorithm">
+<span id="genetic-algorithm-module"></span><h1>genetic_algorithm module<a class="headerlink" href="#module-genetic_algorithm" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="genetic-algorithm-py">
+<h2>genetic_algorithm.py<a class="headerlink" href="#genetic-algorithm-py" title="Permalink to this headline">¶</a></h2>
+<p>Modulo che implementa un algoritmo genetico per allenare le reti neurali a giocare a snake</p>
+<p>I genitori sono selezionati fra i migliori, si fa un crossover + mutazione</p>
+<dl class="py class">
+<dt id="genetic_algorithm.GeneticAlgorithm">
+<em class="property">class </em><code class="sig-prename descclassname">genetic_algorithm.</code><code class="sig-name descname">GeneticAlgorithm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">networks</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">networks_shape</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">population_size</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">generation_number</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">crossover_rate</span><span class="o">=</span><span class="default_value">0.3</span></em>, <em class="sig-param"><span class="n">crossover_method</span><span class="o">=</span><span class="default_value">'neuron'</span></em>, <em class="sig-param"><span class="n">mutation_rate</span><span class="o">=</span><span class="default_value">0.7</span></em>, <em class="sig-param"><span class="n">mutation_method</span><span class="o">=</span><span class="default_value">'weight'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Genetic Algorithm Class</p>
+<dl class="py method">
+<dt id="genetic_algorithm.GeneticAlgorithm.children_production">
+<code class="sig-name descname">children_production</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crossover_number</span></em>, <em class="sig-param"><span class="n">parents</span></em><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm.children_production" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prende casualmente 2 genitori nella lista di genitori e ci fa un crossover,
+generando un figlio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>int</strong><strong>)</strong> (<em>crossover_number</em>) – Numero di figli necessari</p></li>
+<li><p><strong>(</strong><strong>lista di NeuralNetwork</strong><strong>)</strong> (<em>parents</em>) – Lista di genitori</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return (lista di NeuralNetwork)</dt>
+<dd class="field-even"><p>Lista di figli generati</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genetic_algorithm.GeneticAlgorithm.crossover">
+<code class="sig-name descname">crossover</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">net1</span></em>, <em class="sig-param"><span class="n">net2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm.crossover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prende due neural net e produce un figlio in base al metodo contenuto in self.crossover_method</p>
+<p>Esempio di come funziona (method = <code class="docutils literal notranslate"><span class="pre">neuron</span></code>):</p>
+<ul class="simple">
+<li><p>Due network vengono creati (copie dei rispettivi genitori)</p></li>
+<li><p>Seleziona un neurone casuale in un layer casuale OPPURE un bias casuale in un layer casuale</p></li>
+<li><p>Scambia il neurone o bias fra le due neural net</p></li>
+<li><p>Ogni neural net gioca una partita</p></li>
+<li><p>La migliore viene selezionata</p></li>
+</ul>
+<p>Il principio e’ lo stesso per i metodi <code class="docutils literal notranslate"><span class="pre">weight</span></code> o <code class="docutils literal notranslate"><span class="pre">layer</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>NeuralNetwork</strong><strong>)</strong> (<em>net2</em>) – neural net (genitore 1)</p></li>
+<li><p><strong>(</strong><strong>NeuralNetwork</strong><strong>)</strong> – neural net (genitore 2)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return (NeuralNetwork)</dt>
+<dd class="field-even"><p>neural net (figlio)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genetic_algorithm.GeneticAlgorithm.evaluation">
+<code class="sig-name descname">evaluation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">networks</span></em>, <em class="sig-param"><span class="n">num_cores</span></em><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm.evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prende la popolazione di neural net e gli fa giocare 4 partite a testa,
+il punteggio di una neural net e’ la media delle 4 partite</p>
+<p>NB: le 4 partite sono parallelizzate usando <code class="docutils literal notranslate"><span class="pre">joblib</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>lista di NeuralNetwork</strong><strong>)</strong> (<em>networks</em>) – Lista di neural net da valutare</p></li>
+<li><p><strong>(</strong><strong>int</strong><strong>)</strong> (<em>num_cores</em>) – Numero di core della CPU</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genetic_algorithm.GeneticAlgorithm.mutation">
+<code class="sig-name descname">mutation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">net</span></em><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm.mutation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prende una rete neurale e ne crea una copia con una mutazione in base al metodo contenuto in
+self.mutation_method</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>(</strong><strong>NeuralNetwork</strong><strong>)</strong> (<em>net</em>) – neural net che sara’ copiata</p>
+</dd>
+<dt class="field-even">Return (NeuralNetwork)</dt>
+<dd class="field-even"><p>neural net uguale al parametro net, fatta eccezione per le parti mutate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genetic_algorithm.GeneticAlgorithm.mutation_production">
+<code class="sig-name descname">mutation_production</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">networks</span></em>, <em class="sig-param"><span class="n">mutation_number</span></em>, <em class="sig-param"><span class="n">population_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm.mutation_production" title="Permalink to this definition">¶</a></dt>
+<dd><p>Produce nuovi individui dalla popolazione attuale mutandoli</p>
+<p>NB: non modifica gli individui attuali ma ne crea di nuovi</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>lista di NeuralNetwork</strong><strong>)</strong> (<em>networks</em>) – Lista di neural net da mutare</p></li>
+<li><p><strong>(</strong><strong>int</strong><strong>)</strong> (<em>population_size</em>) – Numero di individui da mutare</p></li>
+<li><p><strong>(</strong><strong>int</strong><strong>)</strong> – Dimensioni della popolazione</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return (lista di NeuralNetwork)</dt>
+<dd class="field-even"><p>Lista di nuovi individui (mutati)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genetic_algorithm.GeneticAlgorithm.parent_selection">
+<code class="sig-name descname">parent_selection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">networks</span></em>, <em class="sig-param"><span class="n">crossover_number</span></em>, <em class="sig-param"><span class="n">population_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm.parent_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Funzione di selezione dei parenti, 3 individui casuali e li mette in competizione classificandoli
+in base al loro fitness, il migliore viene selezionato come genitore</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>lista di NeuralNetwork</strong><strong>)</strong> (<em>networks</em>) – Lista di neural net da cui selezionare i parenti</p></li>
+<li><p><strong>(</strong><strong>int</strong><strong>)</strong> (<em>population_size</em>) – Numero di genitori necessari</p></li>
+<li><p><strong>(</strong><strong>int</strong><strong>)</strong> – Dimensioni della popolazione</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return (lista di NeuralNetwork)</dt>
+<dd class="field-even"><p>Lista di genitori selezionati</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genetic_algorithm.GeneticAlgorithm.print_generation">
+<code class="sig-name descname">print_generation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">networks</span></em>, <em class="sig-param"><span class="n">gen</span></em><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm.print_generation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stampa informazioni sulla generazione attuale:</p>
+<ul class="simple">
+<li><p>Miglior fitness</p></li>
+<li><p>Dimensioni della popolazione</p></li>
+<li><p>Media dei top 6</p></li>
+<li><p>Media dei bottom 6</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genetic_algorithm.GeneticAlgorithm.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Funzione main per l’algoritmo genetico, alcuni step sono in parallelo</p>
+<p>Steps ad ogni generazione:</p>
+<ul class="simple">
+<li><p>Selezione parenti</p></li>
+<li><p>Generazione figli</p></li>
+<li><p>Generazione individui mutati</p></li>
+<li><p>Valutazione dell’intera popolazione (vecchia popolazione + figli + individui mutati)</p></li>
+<li><p>Altre mutazioni su individui casuali (migliora il learning)</p></li>
+<li><p>Mantenimento degli individui di <code class="docutils literal notranslate"><span class="pre">population_size</span></code>, scarto dei peggiori</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="genetic_algorithm.GeneticAlgorithm.tournament">
+<code class="sig-name descname">tournament</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">net1</span></em>, <em class="sig-param"><span class="n">net2</span></em>, <em class="sig-param"><span class="n">net3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#genetic_algorithm.GeneticAlgorithm.tournament" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prende 3 neural net, gli fa giocare una partita a testa e seleziona chi performa meglio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>NeuralNetwork</strong><strong>)</strong> (<em>net3</em>) – neural net (primo partecipante)</p></li>
+<li><p><strong>(</strong><strong>NeuralNetwork</strong><strong>)</strong> – neural net (secondo partecipante)</p></li>
+<li><p><strong>(</strong><strong>NeuralNetwork</strong><strong>)</strong> – neural net (terzo partecipante)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return (NeuralNetwork)</dt>
+<dd class="field-even"><p>la neural net vincitrice</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Snake-AI</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">source</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="game.html">game module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">genetic_algorithm module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map.html">map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural_network.html">neural_network module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="snake.html">snake module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">source</a><ul>
+      <li>Previous: <a href="game.html" title="previous chapter">game module</a></li>
+      <li>Next: <a href="map.html" title="next chapter">map module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ivan Valluzzi, Antonio Scardavilli.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/rst/genetic_algorithm.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>map module &#8212; Snake-AI 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="neural_network module" href="neural_network.html" />
+    <link rel="prev" title="genetic_algorithm module" href="genetic_algorithm.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-map">
+<span id="map-module"></span><h1>map module<a class="headerlink" href="#module-map" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="map-py">
+<h2>map.py<a class="headerlink" href="#map-py" title="Permalink to this headline">¶</a></h2>
+<p>Questo modulo e’ utilizzato per la creazione della mappa del gioco</p>
+<p>La mappa:</p>
+<ul class="simple">
+<li><p>Contiene la propria morfologia in una matrice (vedi MAP in constants.py)</p></li>
+<li><p>Contiene un’istanza di snake ed una di food (il cibo spawna uno per volta)</p></li>
+<li><p>Si occupa della gestione delle collisioni, creazione di cibo e di passare ogni stato della partita alla neural net</p></li>
+</ul>
+<dl class="py class">
+<dt id="map.Map">
+<em class="property">class </em><code class="sig-prename descclassname">map.</code><code class="sig-name descname">Map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">snake</span></em><span class="sig-paren">)</span><a class="headerlink" href="#map.Map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Map class</p>
+<dl class="py method">
+<dt id="map.Map.add_food">
+<code class="sig-name descname">add_food</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block_x</span></em>, <em class="sig-param"><span class="n">block_y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#map.Map.add_food" title="Permalink to this definition">¶</a></dt>
+<dd><p>Genera cibo nella posizione (block_x, block_y)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="map.Map.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">window</span></em><span class="sig-paren">)</span><a class="headerlink" href="#map.Map.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renderizza la mappa (sfondo, pareti e cibo) e il serpente</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>window</strong> – finestra del gioco</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="map.Map.scan">
+<code class="sig-name descname">scan</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#map.Map.scan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Controlla lo stato della partita e lo mette nella variabile <code class="docutils literal notranslate"><span class="pre">scan</span></code> (lista di liste), che verra’ poi passata alla neural net</p>
+<p>NB:</p>
+<ul class="simple">
+<li><p>I primi 7 input sono per la parete, i successivi 7 per il cibo, gli ultimi 7 per il corpo del serpente</p></li>
+<li><p>Il cibo e’ visto attraverso tutta la mappa, mentre pareti e corpo del serpente sono visti solo ad una distanza di
+massimo 10 blocchi dalla testa</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="map.Map.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#map.Map.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Controlla se ci sono collisioni fra la testa del serpente ed una parete o del cibo</p>
+<p>Aggiorna lo stato della partita in caso di collisione</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="map.distance">
+<code class="sig-prename descclassname">map.</code><code class="sig-name descname">distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">p2</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#map.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fornisce la distanza euclidea fra due punti</p>
+<p>&#64;jit e’ utilizzato per velocizzare l’elaborazione</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>(</strong><strong>array di int</strong><strong>)</strong> (<em>p2</em>) – Punto d’origine</p></li>
+<li><p><strong>(</strong><strong>array di int</strong><strong>)</strong> – Punto finale</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return (int)</dt>
+<dd class="field-even"><p>Distanza</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Snake-AI</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">source</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="game.html">game module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="genetic_algorithm.html">genetic_algorithm module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">map module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neural_network.html">neural_network module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="snake.html">snake module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">source</a><ul>
+      <li>Previous: <a href="genetic_algorithm.html" title="previous chapter">genetic_algorithm module</a></li>
+      <li>Next: <a href="neural_network.html" title="next chapter">neural_network module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ivan Valluzzi, Antonio Scardavilli.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/rst/map.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
