@@ -86,8 +86,8 @@ game = Game()
 Decommenta per giocare a snake
 """
 
-# game = Game()
-# game.start(playable=True, display=True, speed=10)
+game = Game()
+game.start(playable=True, display=True, speed=10)
   
 """
 Algoritmo genetico

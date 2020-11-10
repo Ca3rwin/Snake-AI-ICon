@@ -42,18 +42,17 @@ class Map:
             self.snake.alive = False
 
     def add_food(self, block_x, block_y):
-        """
-        Adds food on (block_x, block_y) position
-        """
+        """ Genera cibo nella posizione (block_x, block_y) """
+        
         self.food = [block_x, block_y]
         try:
-            if self.structure[block_x][block_y] == 0:                   # checks if food will spawn in a free space (no wall, wall bad)
-                for i in self.snake.body:                               # checks if food will spawn where the snake is
+            if self.structure[block_x][block_y] == 0:                   # controlla che il cibo si generi in una posizione libera della mappa
+                for i in self.snake.body:
                     if i == [block_x, block_y]:
-                        # Cibo spawnato nel serpente, respawn...
+                        # Cibo generato nel serpente
                         self.add_food(random.randint(0, SPRITE_NUMBER - 1), random.randint(0, SPRITE_NUMBER - 1))
             else:
-                # Cibo spawnato nella parete, respawn
+                # Cibo generato nella parete
                 self.add_food(random.randint(0, SPRITE_NUMBER - 1), random.randint(0, SPRITE_NUMBER - 1))
             
         except Exception: 
@@ -62,70 +61,68 @@ class Map:
 
     def render(self, window):
         """
-        Renders the map (background, walls and food) on the game window and calls render() of snake
-        Very very very unoptimized since render does not affect the genetic algorithm
+        Renderizza la mappa (sfondo, pareti e cibo) e il serpente
 
-        :param window: surface window
+        :param window: finestra del gioco
         """
-        wall = pygame.image.load(IMAGE_WALL).convert()          # loading images
+        wall = pygame.image.load(IMAGE_WALL).convert()          # caricamento immagini
         food = pygame.image.load(IMAGE_FOOD).convert_alpha()
 
-        window.fill([0,0,0])                # painting background
+        window.fill([0,0,0])                # "dipinge" lo sfondo
         num_line = 0
-        for line in self.structure:         # running through the map structure
+        for line in self.structure:         # itera per ogni vettore della matrice MAP
             num_case = 0
             for sprite in line:
                 x = num_case * SPRITE_SIZE
                 y = num_line * SPRITE_SIZE
-                if sprite == 1:                         # displaying wall
+                if sprite == 1:                         # mostra parete
                     window.blit(wall, (x, y))
-                if self.food == [num_case, num_line]:   # displaying food
+                if self.food == [num_case, num_line]:   # mostra cibo
                     window.blit(food, (x, y))
                 num_case += 1
             num_line += 1
-        self.snake.render(window)         # snake will be rendered on above the map
+        self.snake.render(window)         # il serpente verrà renderizzato sopra la mappa
 
 
 
     def scan(self):
         """
-        Scans the snake's environment into the 'scan' variable (list of lists) and gives it to snake's vision
+        Controlla lo stato della partita e lo mette nella variabile 'scan' (lista di liste), che verra' poi passata alla neural net
 
-        Notes:
-        - 7 first inputs are for walls, 7 next for food, 7 last for itself (its body)
-        - Food is seen across all the map, walls and body are seen in range of 10 blocks max
-        - This method is long and I do not factorise much for performance issues,
-          the structure is easily understandable anyway
+        NB:\n
+        - I primi 7 input sono per la parete, i successivi 7 per il cibo, gli ultimi 7 per il corpo del serpente
+        - Il cibo e' visto attraverso tutta la mappa, mentre pareti e corpo del serpente sono visti solo ad una distanza di
+          massimo 10 blocchi dalla testa
 
-        :return: nothing but gives vision to the snake
+        :return: niente ma rende la mappa visibile alla neural net
         """
         def scan_wall(direction_x, direction_y, direction_range):
             """
-            Looks for a wall in the direction given in parameters for 10 steps max
+            Controlla se c'e' una parete nella direzione data nei parametri entro 10 blocchi
 
-            I decided to use inner methods for a compromise between performance and factorisation
-
-            :param direction_x: direction in x axis, can be 1, 0 or -1 for "right", "stay" and "left" respectively
-            :param direction_y: direction in y axis, can be 1, 0 or -1 for "down", "stay" and "up" respectively
-            :param direction_range: maximum range to scan
-            :return: number with 0 value if nothing or 1/distance to wall if wall's detected
+            :param direction_x: direzione nell'asse x, puo' essere 1, 0 o -1 per "destra", "dritto" e "sinistra"
+            :param direction_y: direzione nell'asse y, puo' essere 1, 0 o -1 per "giù", "dritto" o "su"
+            :param direction_range: range massimo da controllare
+            :return: int con valore 0 se non e' stata trovata una parete, altrimenti ha come valore 1/distanza dalla parete
             """
             res = 0
-            for i in range(1, 10):                      # looking up to 10 blocks max
-                step_x = head_x + i * direction_x       # coordinates of next block to check
+            for i in range(1, 10):                      # controlla fino a 10 blocchi di distanza
+                step_x = head_x + i * direction_x       # coordinate del prossimo blocco da controllare
                 step_y = head_y + i * direction_y
 
                 if i < direction_range:
-                    if structure[step_y][step_x] == WALL:                       # if wall is detected in current block
-                        res = 1 / distance((head_x, head_y), (step_x, step_y))  # returns 1/distance to the block
+                    if structure[step_y][step_x] == WALL:                       # se viene trovata una parete nel blocco attuale
+                        res = 1 / distance((head_x, head_y), (step_x, step_y))  # ritorna 1/distanza dal blocco
             return res
 
-        def scan_self(direction_x, direction_y, direction_range):
+        def scan_iself(direction_x, direction_y, direction_range):
             """
-            Looks for a snake's body block in the direction given in parameters for 10 steps max
+            Controlla se c'e' il corpo del serpente nella direzione data nei parametri entro 10 blocchi
 
-            :params see "scan_wall", same params
-            :return: number with 0 value if nothing or 1/distance to body if a body block is detected
+            :param direction_x: direzione nell'asse x, puo' essere 1, 0 o -1 per "destra", "dritto" e "sinistra"
+            :param direction_y: direzione nell'asse y, puo' essere 1, 0 o -1 per "giù", "dritto" o "su"
+            :param direction_range: range massimo da controllare
+            :return: int con valore 0 se non e' stata trovata una parete, altrimenti ha come valore 1/distanza dal corpo
             """
             res = 0
             for i in range(1, 10):
@@ -139,10 +136,12 @@ class Map:
 
         def scan_food(direction_x, direction_y, direction_range):
             """
-            Looks for food in the direction given in parameters until range is reached
+            Controlla se c'e' del cibo nella direzione data nei parametri finché entro ``direction_range`` blocchi
 
-            :params see "scan_wall", same params
-            :return: number with 0 value if nothing or 1/distance to body if a body block is detected
+            :param direction_x: direzione nell'asse x, puo' essere 1, 0 o -1 per "destra", "dritto" e "sinistra"
+            :param direction_y: direzione nell'asse y, puo' essere 1, 0 o -1 per "giù", "dritto" o "su"
+            :param direction_range: range massimo da controllare
+            :return: int con valore 0 se non e' stata trovata una parete, altrimenti ha come valore 1/distanza dal cibo
             """
             res = 0
             for i in range(1, direction_range):
@@ -150,39 +149,39 @@ class Map:
                     res = 1
             return res
 
-        scan = [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]]    # default value
+        scan = [[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0],[0]]    # valore di default
         structure = self.structure
-        snake_body = self.snake.body                # making local variables for readability and performance
+        snake_body = self.snake.body                # creazione di variabili locali per leggibilita' e performance
         head_x = self.snake.head[0]
         head_y = self.snake.head[1]
         food_x = self.food[0]
         food_y = self.food[1]
 
-        forward_x = self.snake.direction[0]         # calculating each coordinate for each 7 directions
-        forward_y = self.snake.direction[1]         # since the snake sees in FIRST PERSON
+        forward_x = self.snake.direction[0]         # calcola ogni coordinata per tutte e 7 le direzioni
+        forward_y = self.snake.direction[1]         # questo perché il serpente vede in "prima persona"
         right_x = -forward_y
         right_y = forward_x
-        left_x = forward_y                          # for example, if snake's looking in [1,0] direction (down)
-        left_y = -forward_x                         # its left is [1,0] (right for us because we look from above)
+        left_x = forward_y                          # per esempio, se il serpente guarda nella direzione [1,0] (giu')
+        left_y = -forward_x                         # la sua sinistra è [1,0] (destra per noi che guardiamo "dall'alto")
         forward_right_x = forward_x + right_x
         forward_right_y = forward_y + right_y
         forward_left_x = forward_x + left_x
-        forward_left_y = forward_y + left_y         # see snake.py class for better explanations
+        forward_left_y = forward_y + left_y         # guarda la classe snake.py per migliori spiegazioni
         backward_right_x = -forward_left_x
         backward_right_y = -forward_left_y
         backward_left_x = -forward_right_x
         backward_left_y = -forward_right_y
 
-        forward_range = (20 - (forward_x * head_x + forward_y * head_y) - 1) % 19 + 1   # computing max range
-        backward_range = 21 - forward_range                                             # for each direction
+        forward_range = (20 - (forward_x * head_x + forward_y * head_y) - 1) % 19 + 1   # elaborazione del range massimo
+        backward_range = 21 - forward_range                                             # per ogni direzione
         right_range = (20 - (right_x * head_x + right_y * head_y) - 1) % 19 + 1
         left_range = 21 - right_range
-        forward_right_range = min(forward_range, right_range)           # values are hard encoded
-        forward_left_range = min(forward_range, left_range)             # since I'm not planning on making it modifiable
+        forward_right_range = min(forward_range, right_range)           # i valori sono memorizzati in modo grezzo
+        forward_left_range = min(forward_range, left_range)
         backward_right_range = min(backward_range, right_range)
         backward_left_range = min(backward_range, left_range)
 
-        scan[0][0] = scan_wall(forward_x, forward_y, forward_range)                 # scanning walls in all directions
+        scan[0][0] = scan_wall(forward_x, forward_y, forward_range)                 # cerca le pareti in tutte le direzioni
         scan[1][0] = scan_wall(right_x, right_y, right_range)
         scan[2][0] = scan_wall(left_x, left_y, left_range)
         scan[3][0] = scan_wall(forward_right_x, forward_right_y, forward_right_range)
@@ -190,7 +189,7 @@ class Map:
         scan[5][0] = scan_wall(backward_right_x, backward_right_y, backward_right_range)
         scan[6][0] = scan_wall(backward_left_x, backward_left_y, backward_left_range)
 
-        scan[7][0] = scan_food(forward_x, forward_y, forward_range)                 # scanning food in all directions
+        scan[7][0] = scan_food(forward_x, forward_y, forward_range)                 # cerca cibo in tutte le direzioni
         scan[8][0] = scan_food(right_x, right_y, right_range)
         scan[9][0] = scan_food(left_x, left_y, left_range)
         scan[10][0] = scan_food(forward_right_x, forward_right_y, forward_right_range)
@@ -198,7 +197,7 @@ class Map:
         scan[12][0] = scan_food(backward_right_x, backward_right_y, backward_right_range)
         scan[13][0] = scan_food(backward_left_x, backward_left_y, backward_left_range)
 
-        scan[14][0] = scan_self(forward_x, forward_y, forward_range)                # scanning body in all directions
+        scan[14][0] = scan_self(forward_x, forward_y, forward_range)                # cerca parti del proprio corpo in tutte le direzioni
         scan[15][0] = scan_self(right_x, right_y, right_range)
         scan[16][0] = scan_self(left_x, left_y, left_range)
         scan[17][0] = scan_self(forward_right_x, forward_right_y, forward_right_range)
@@ -206,18 +205,18 @@ class Map:
         scan[19][0] = scan_self(backward_right_x, backward_right_y, backward_right_range)
         scan[20][0] = scan_self(backward_left_x, backward_left_y, backward_left_range)
 
-        self.snake.vision = scan    # gives snake vision
+        self.snake.vision = scan    # da' "visione" al serpente
 
 
 @jit(nopython=True)
 def distance(p1=None, p2=None):
     """
-    Gives euclidian distance between two points
-    @jit is used to speed up computation
+    Fornisce la distanza euclidea fra due punti\n
+    @jit e' utilizzato per velocizzare l'elaborazione
 
-    :param p1: origin point
-    :param p2: end point
-    :return: distance
+    :param p1: punto d'origine
+    :param p2: punto finale
+    :return: distanza
     """
     return math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
 
